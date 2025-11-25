@@ -21,7 +21,7 @@
 ```bash
 # Clone the repository
 git clone 
-cd microservices-project
+cd UserManagementMicroservice
 
 # Start all services
 docker-compose up --build
