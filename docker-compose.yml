@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - user-service
+      - notification-service
+    volumes:
+      - ./api-gateway:/app
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./user-service:/app
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./notification-service:/app
