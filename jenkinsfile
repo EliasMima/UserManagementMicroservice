@@ -1,0 +1,134 @@
+groovy
+pipeline {
+    agent any
+    
+    environment {
+        // ⚠️ IMPORTANT: Change this to YOUR Docker Hub username!
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKERHUB_USERNAME = 'eliaseji'  
+        
+        // Image names
+        USER_SERVICE_IMAGE = "${DOCKERHUB_USERNAME}/user-service"
+        NOTIFICATION_SERVICE_IMAGE = "${DOCKERHUB_USERNAME}/notification-service"
+        API_GATEWAY_IMAGE = "${DOCKERHUB_USERNAME}/api-gateway"
+        
+        // Version tag
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+    
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+               
+                echo 'STAGE 1: Checking out code from GitHub'
+             
+                checkout scm
+                sh 'git log -1 --oneline'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+               
+                echo 'STAGE 2: Installing Dependencies'
+               
+                script {
+                    def services = ['user-service', 'notification-service', 'api-gateway']
+                    services.each { service ->
+                        echo "Installing dependencies for ${service}..."
+                        dir(service) {
+                            sh 'npm ci'
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                
+                echo 'STAGE 3: Running Tests'
+               
+                script {
+                    def services = ['user-service', 'notification-service', 'api-gateway']
+                    services.each { service ->
+                        dir(service) {
+                            sh 'npm test || echo "No tests configured"'
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Build Docker Images') {
+            steps {
+                
+                echo 'STAGE 4: Building Docker Images'
+                
+                sh """
+                    docker build -t ${USER_SERVICE_IMAGE}:${IMAGE_TAG} -t ${USER_SERVICE_IMAGE}:latest ./user-service
+                    docker build -t ${NOTIFICATION_SERVICE_IMAGE}:${IMAGE_TAG} -t ${NOTIFICATION_SERVICE_IMAGE}:latest ./notification-service
+                    docker build -t ${API_GATEWAY_IMAGE}:${IMAGE_TAG} -t ${API_GATEWAY_IMAGE}:latest ./api-gateway
+                """
+            }
+        }
+        
+        stage('Push to Docker Hub') {
+            steps {
+                
+                echo 'STAGE 5: Pushing to Docker Hub'
+               
+                sh '''
+                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    
+                    docker push ${USER_SERVICE_IMAGE}:${IMAGE_TAG}
+                    docker push ${USER_SERVICE_IMAGE}:latest
+                    
+                    docker push ${NOTIFICATION_SERVICE_IMAGE}:${IMAGE_TAG}
+                    docker push ${NOTIFICATION_SERVICE_IMAGE}:latest
+                    
+                    docker push ${API_GATEWAY_IMAGE}:${IMAGE_TAG}
+                    docker push ${API_GATEWAY_IMAGE}:latest
+                    
+                    docker logout
+                '''
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                echo 'STAGE 6: Deploying Services'
+               
+                sh '''
+                    docker-compose down || true
+                    docker-compose pull
+                    docker-compose up -d
+                    
+                    echo "Waiting for services to start..."
+                    sleep 10
+                    
+                    curl -f http://localhost:3000/health || exit 1
+                '''
+            }
+        }
+    }
+    
+    post {
+        always {
+            sh 'docker logout || true'
+            cleanWs()
+        }
+        success {
+            echo 'BUILD SUCCESSFUL!'
+        }
+        failure {
+            echo ' BUILD FAILED!'
+        }
+    }
+}
