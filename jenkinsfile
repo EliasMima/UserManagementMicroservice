@@ -3,7 +3,7 @@ pipeline {
     agent any
     
     environment {
-        // ⚠️ IMPORTANT: Change this to YOUR Docker Hub username!
+      
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         DOCKERHUB_USERNAME = 'eliaseji'  
         
