@@ -125,7 +125,7 @@ pipeline {
             cleanWs()
         }
         success {
-            echo 'BUILD SUCCESSFUL!yaaaay'
+            echo 'BUILD SUCCESSFUL!kazi safi'
         }
         failure {
             echo ' BUILD FAILED!'
