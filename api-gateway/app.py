@@ -46,10 +46,7 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """
-    Health check endpoint
-    TODO for DevOps intern: Enhance with downstream service health checks
-    """
+
     logger.info("Health check requested")
     
     # Basic health check
