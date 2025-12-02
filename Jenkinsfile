@@ -128,7 +128,7 @@ pipeline {
             echo 'BUILD SUCCESSFUL!'
         }
         failure {
-            echo ' BUILD FAILED!'
+            echo ' BUILD FAILED! '
         }
     }
 }
