@@ -43,7 +43,7 @@ pipeline {
                     services.each { service ->
                         echo "Installing dependencies for ${service}..."
                         dir(service) {
-                            sh 'npm ci'
+                            sh 'npm install'
                         }
                     }
                 }
