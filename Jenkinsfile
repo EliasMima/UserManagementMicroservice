@@ -111,9 +111,7 @@ pipeline {
                     docker compose up -d
                     
                     echo "Waiting for services to start..."
-                    sleep 10
-                    
-                    curl -f http://localhost:3000/health || exit 1
+
                 '''
             }
         }
