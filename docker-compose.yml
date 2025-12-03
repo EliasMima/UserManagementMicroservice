@@ -1,3 +1,5 @@
+
+
 services:
   api-gateway:
     build: ./api-gateway
@@ -7,19 +9,18 @@ services:
       - user-service
       - notification-service
     volumes:
-      - /home/elias/docker-workspace/api-gateway:/app
+      - ./api-gateway:/app
 
   user-service:
     build: ./user-service
     ports:
       - "8001:8001"
     volumes:
-      - /home/elias/docker-workspace/user-service:/app
+      - ./user-service:/app
 
   notification-service:
     build: ./notification-service
     ports:
       - "8002:8002"
     volumes:
-      - /home/elias/docker-workspace/notification-service:/app
-
+      - ./notification-service:/app
