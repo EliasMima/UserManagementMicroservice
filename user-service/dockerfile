@@ -1,16 +1,23 @@
-FROM python:3.13
+FROM python:3.13-slim
+
 WORKDIR /usr/local/app
 
-# Install the application dependencies
+# Create non-root user
+RUN useradd -m app
+
+# Install dependencies
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy in the source code
+# Copy app code
 COPY . .
+
+# Switch to non-root user
+USER app
+ENV PATH="/usr/local/bin:$PATH"
+
+# Expose service port
 EXPOSE 8001
 
-# app user so the container doesn't run as the root user
-RUN useradd app
-USER app
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Start the app
+CMD ["uvicorn", "user_service.main:app", "--host", "0.0.0.0", "--port", "8001"]
