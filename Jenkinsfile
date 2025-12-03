@@ -107,7 +107,7 @@ pipeline {
                
                 sh '''
                     docker compose down || true
-                    docker compose pull
+                    docker compose build
                     docker compose up -d
                     
                     echo "Waiting for services to start..."
