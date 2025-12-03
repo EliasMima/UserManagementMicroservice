@@ -106,9 +106,9 @@ pipeline {
                 echo 'STAGE 6: Deploying Services'
                
                 sh '''
-                    docker-compose down || true
-                    docker-compose pull
-                    docker-compose up -d
+                    docker compose down || true
+                    docker compose pull
+                    docker compose up -d
                     
                     echo "Waiting for services to start..."
                     sleep 10
