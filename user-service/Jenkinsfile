@@ -53,7 +53,38 @@ pipeline {
                 }
             }
         }
-        
+        // ========================================
+        // STAGE: VALIDATE DEPLOYMENT INTENT
+        // ========================================
+        stage('Validate Deployment Intent') {
+            steps {
+                script {
+                    def commitMsg = sh(
+                        script: "git log -1 --pretty=%B",
+                        returnStdout: true
+                    ).trim()
+
+                    echo "Commit message: ${commitMsg}"
+
+                    def deployTag = "[deploy:${SERVICE_NAME}]"
+
+                    if (!commitMsg.contains('[deploy:')) {
+                        echo "⏭ No deploy tag found. Skipping ${SERVICE_NAME} pipeline."
+                        currentBuild.result = 'NOT_BUILT'
+                        error("Pipeline stopped intentionally")
+                    }
+
+                    if (!commitMsg.contains(deployTag)) {
+                        echo "⏭ ${SERVICE_NAME} not selected for deployment."
+                        currentBuild.result = 'NOT_BUILT'
+                        error("Pipeline stopped intentionally")
+                    }
+
+                    echo "✅ Deployment authorized for ${SERVICE_NAME}"
+                }
+            }
+        }
+}
         // ========================================
         // STAGE 2: INSTALL DEPENDENCIES
         // ========================================
