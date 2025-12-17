@@ -299,8 +299,8 @@ async def startup_event():
     Good place for initialization tasks
     """
     logger.info("=" * 50)
-    logger.info("🚀 User Service Starting Up")
-    logger.info(f"📍 Notification Service URL: {NOTIFICATION_SERVICE_URL}")
+    logger.info("User Service Starting Up")
+    logger.info(f" Notification Service URL: {NOTIFICATION_SERVICE_URL}")
     logger.info("=" * 50)
 
 
