@@ -60,6 +60,21 @@ pipeline {
                 }
             }
         }
+
+                stage("${serviceName}: Push to Registry") {
+            dir(serviceName) {
+                docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKER_CREDENTIALS_ID) {
+                    def imageTag = "${env.DOCKER_USERNAME}/${serviceName}:${env.BUILD_NUMBER}"
+                    def latestTag = "${env.DOCKER_USERNAME}/${serviceName}:latest"
+                    
+                    sh """
+                        docker push ${DOCKER_REGISTRY}/${imageTag}
+                        docker push ${DOCKER_REGISTRY}/${latestTag}
+                    """
+                }
+                echo "✓ Pushed to Docker Hub: ${serviceName}"
+            }
+        }
         
         stage('Deploy Services') {
             when {
@@ -107,49 +122,36 @@ pipeline {
     }
 }
 
-// Reusable function for building a service
-def buildService(String serviceName) {
-    try {
-        stage("${serviceName}: Install") {
-            dir(serviceName) {
-                sh 'npm install || mvn install || pip install -r requirements.txt || echo "No install needed"'
-            }
-        }
+// // Reusable function for building a service
+// def buildService(String serviceName) {
+//     try {
+//         stage("${serviceName}: Install") {
+//             dir(serviceName) {
+//                 sh 'npm install || mvn install || pip install -r requirements.txt || echo "No install needed"'
+//             }
+//         }
         
-        stage("${serviceName}: Test") {
-            dir(serviceName) {
-                sh 'npm test || mvn test || pytest || echo "No tests configured"'
-            }
-        }
+//         stage("${serviceName}: Test") {
+//             dir(serviceName) {
+//                 sh 'npm test || mvn test || pytest || echo "No tests configured"'
+//             }
+//         }
         
-        stage("${serviceName}: Docker Build") {
-            dir(serviceName) {
-                def imageTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:${env.BUILD_NUMBER}"
-                def latestTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:latest"
+//         stage("${serviceName}: Docker Build") {
+//             dir(serviceName) {
+//                 def imageTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:${env.BUILD_NUMBER}"
+//                 def latestTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:latest"
                 
-                sh """
-                    docker build -t ${imageTag} -t ${latestTag} .
-                """
-                echo "✓ Built Docker image: ${imageTag}"
-            }
-        }
+//                 sh """
+//                     docker build -t ${imageTag} -t ${latestTag} .
+//                 """
+//                 echo "✓ Built Docker image: ${imageTag}"
+//             }
+//         }
         
-        stage("${serviceName}: Push to Registry") {
-            dir(serviceName) {
-                docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKER_CREDENTIALS_ID) {
-                    def imageTag = "${env.DOCKER_USERNAME}/${serviceName}:${env.BUILD_NUMBER}"
-                    def latestTag = "${env.DOCKER_USERNAME}/${serviceName}:latest"
-                    
-                    sh """
-                        docker push ${DOCKER_REGISTRY}/${imageTag}
-                        docker push ${DOCKER_REGISTRY}/${latestTag}
-                    """
-                }
-                echo "✓ Pushed to Docker Hub: ${serviceName}"
-            }
-        }
-    } catch (Exception e) {
-        echo "✗ Failed to build ${serviceName}: ${e.message}"
-        throw e
-    }
-}
+
+//     } catch (Exception e) {
+//         echo "✗ Failed to build ${serviceName}: ${e.message}"
+//         throw e
+//     }
+// }
