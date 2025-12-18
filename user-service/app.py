@@ -282,14 +282,14 @@ async def send_notification(email: str, subject: str, message: str):
                 )
                 
     except httpx.TimeoutException:
-        logger.error(f"❌ Notification service timeout for {email}")
+        logger.error(f" Notification service timeout for {email}")
     except httpx.ConnectError:
         logger.error(
-            f"❌ Cannot connect to notification service at {NOTIFICATION_SERVICE_URL}"
+            f" Cannot connect to notification service at {NOTIFICATION_SERVICE_URL}"
         )
     except Exception as e:
         # Don't fail the user operation if notification fails
-        logger.error(f"❌ Failed to send notification to {email}: {str(e)}")
+        logger.error(f"Failed to send notification to {email}: {str(e)}")
 
 
 @app.on_event("startup")
