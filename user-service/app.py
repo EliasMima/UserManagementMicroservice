@@ -311,8 +311,8 @@ async def shutdown_event():
     Good place for cleanup tasks
     """
     logger.info("=" * 50)
-    logger.info("👋 User Service Shutting Down")
-    logger.info(f"📊 Total users in database: {len(users_db)}")
+    logger.info(" User Service Shutting Down")
+    logger.info(f" Total users in database: {len(users_db)}")
     logger.info("=" * 50)
 
 
