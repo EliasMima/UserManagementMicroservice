@@ -343,8 +343,8 @@ async def shutdown_event():
     Good place for cleanup tasks
     """
     logger.info("=" * 50)
-    logger.info("👋 Notification Service Shutting Down")
-    logger.info(f"📊 Total notifications sent: {len(notification_history)}")
+    logger.info(" Notification Service Shutting Down")
+    logger.info(f" Total notifications sent: {len(notification_history)}")
     logger.info("=" * 50)
 
 
