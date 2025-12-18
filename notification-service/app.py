@@ -145,10 +145,10 @@ async def send_notification(notification: NotificationRequest):
     notification_id_counter += 1
     
     if is_successful:
-        logger.info(f"✅ Notification sent successfully - ID: {notification_record['id']}")
-        logger.info(f"⏱️  Delivery time: {delivery_time}ms")
+        logger.info(f" Notification sent successfully - ID: {notification_record['id']}")
+        logger.info(f"  Delivery time: {delivery_time}ms")
     else:
-        logger.error(f"❌ Notification failed - ID: {notification_record['id']}")
+        logger.error(f" Notification failed - ID: {notification_record['id']}")
         # In production, you might want to raise an exception here
         # For learning purposes, we just log and continue
     
