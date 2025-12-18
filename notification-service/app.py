@@ -284,12 +284,12 @@ async def clear_notifications():
     
     ⚠️ WARNING: This will delete all notification history!
     """
-    logger.warning("🗑️  Clearing all notification history")
+    logger.warning(" Clearing all notification history")
     
     count = len(notification_history)
     notification_history.clear()
     
-    logger.info(f"✅ Cleared {count} notifications")
+    logger.info(f"Cleared {count} notifications")
     
     return {
         "success": True,

@@ -77,7 +77,7 @@ pipeline {
                     services.each { service ->
                         dir(service) {
                             sh """
-                                docker-compose -f docker-compose.yml up -d ${service}
+                                docker compose -f docker compose.yml up -d ${service}
                             """
                             echo "✓ Deployed: ${service}"
                         }
