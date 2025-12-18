@@ -5,7 +5,6 @@ pipeline {
         DOCKER_REGISTRY = 'docker.io'
         DOCKERHUB_CREDENTIALS_ID = credentials('89df4834-57b8-4fe8-9e25-d8775421a081')
         GIT_PREVIOUS_COMMIT = "${env.GIT_PREVIOUS_SUCCESSFUL_COMMIT ?: 'HEAD~1'}"
-        GIT_SHA=$(git rev-parse --short HEAD)
     }
     
     stages {
@@ -123,10 +122,10 @@ def buildService(String serviceName) {
         stage("${serviceName}: Docker Build") {
             dir(serviceName) {
                 def imageTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:${env.BUILD_NUMBER}"
-                def latestTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:GIT_SHA"
+                def latestTag = "${DOCKER_REGISTRY}/${env.DOCKER_USERNAME}/${serviceName}:latest"
                 
                 sh """
-                    docker build -t ${imageTag}:GIT_SHA .
+                    docker build -t ${imageTag} -t ${latestTag} .
                 """
                 echo "✓ Built Docker image: ${imageTag}"
             }

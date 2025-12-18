@@ -149,8 +149,8 @@ async def send_notification(notification: NotificationRequest):
         logger.info(f"  Delivery time: {delivery_time}ms")
     else:
         logger.error(f" Notification failed - ID: {notification_record['id']}")
-        # In production, you might want to raise an exception here
-        # For learning purposes, we just log and continue
+        # In production, raise an exception here
+        
     
     logger.info("=" * 60)
     
