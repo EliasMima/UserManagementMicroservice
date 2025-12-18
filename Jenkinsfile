@@ -32,7 +32,7 @@ pipeline {
                     
                     if (changedServices.isEmpty()) {
                         echo "No service changes detected. Skipping pipeline."
-                        currentBuild.result = 'SUCCESS'
+                        currentBuild.result = 'SUCCESS!'
                         error('No changes to build')
                     } else {
                         echo "Building services: ${changedServices.join(', ')}"
