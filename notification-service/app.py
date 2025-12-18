@@ -309,7 +309,7 @@ async def delete_notification(notification_id: int):
     for i, notification in enumerate(notification_history):
         if notification["id"] == notification_id:
             deleted = notification_history.pop(i)
-            logger.info(f"✅ Notification deleted: {notification_id}")
+            logger.info(f" Notification deleted: {notification_id}")
             return {
                 "success": True,
                 "message": "Notification deleted",
