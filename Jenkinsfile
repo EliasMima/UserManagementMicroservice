@@ -61,26 +61,23 @@ pipeline {
             }
         }
         
-        stage('Deploy Services') {
+stage('Deploy Services') {
             when {
-                expression { env.CHANGED_SERVICES != '' }
+                expression { env.CHANGED_SERVICES?.trim() }
             }
             steps {
                 script {
-                    def services = env.CHANGED_SERVICES.split(',')
-                    
-                    echo "Deploying changed services with Docker Compose..."
-                    
-                    // Generate docker-compose override for only changed services
-                    def composeServices = services.collect { "      - ${it}" }.join('\n')
-                    
-                    services.each { service ->
-                        dir(service) {
-                            sh """
-                                docker compose -f docker compose.yml up -d ${service}
-                            """
-                            echo "✓ Deployed: ${service}"
-                        }
+                    def services = env.CHANGED_SERVICES.split(',').collect { it.trim() }
+
+                    echo "Deploying services: ${services.join(', ')}"
+
+                    sh """
+                        docker compose pull ${services.join(' ')}
+                        docker compose up -d ${services.join(' ')}
+                    """
+
+                    services.each {
+                        echo "✓ Deployed: ${it}"
                     }
                 }
             }

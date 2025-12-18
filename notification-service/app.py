@@ -330,9 +330,9 @@ async def startup_event():
     Good place for initialization tasks
     """
     logger.info("=" * 50)
-    logger.info("🚀 Notification Service Starting Up")
-    logger.info("📧 Email simulation mode active")
-    logger.info("📱 SMS simulation mode active")
+    logger.info("Notification Service Starting Up")
+    logger.info(" Email simulation mode active")
+    logger.info(" SMS simulation mode active")
     logger.info("=" * 50)
 
 
