@@ -115,7 +115,7 @@ def buildService(String serviceName) {
         
         stage("${serviceName}: Test") {
             dir(serviceName) {
-                sh 'pytest || echo "No tests configured"'
+                sh 'pytest || echo "No tests configured!"'
             }
         }
         
