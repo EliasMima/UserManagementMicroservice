@@ -109,7 +109,7 @@ def buildService(String serviceName) {
     try {
         stage("${serviceName}: Install") {
             dir(serviceName) {
-                sh ' pip install -r requirements.txt || echo "No install needed"'
+                sh ' pip install -r requirements.txt --break-system-packages || echo "No install needed"'
             }
         }
         
