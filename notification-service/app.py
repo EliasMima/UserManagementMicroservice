@@ -163,19 +163,7 @@ async def get_notifications(
     status: Optional[str] = None,
     priority: Optional[str] = None
 ):
-    """
-    Get notification history
-    
-    Query parameters:
-    - limit: Maximum number of notifications to return (default: 100)
-    - status: Filter by status (sent/failed)
-    - priority: Filter by priority (low/normal/high)
-    
-    This endpoint is useful for:
-    - Debugging notification issues
-    - Monitoring notification delivery
-    - Auditing notification history
-    """
+
     logger.info(f"Fetching notification history - Limit: {limit}")
     
     # Apply filters
