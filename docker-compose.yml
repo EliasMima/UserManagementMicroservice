@@ -21,6 +21,6 @@ services:
   notification-service:
     build: ./notification-service
     ports:
-      - "8004:8002"
+      - "8002:8002"
     volumes:
       - ./notification-service:/app

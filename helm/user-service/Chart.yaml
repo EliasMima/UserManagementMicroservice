@@ -1,0 +1,12 @@
+apiVersion: v2
+name:  user-service
+description: A Helm chart for User-Service microservice
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - user-service
+  - microservices
+maintainers:
+  - name: DevOps Team
+    email: devops@example.com
