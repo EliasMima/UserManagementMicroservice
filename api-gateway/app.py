@@ -204,7 +204,7 @@ async def delete_user(user_id: int):
 async def http_exception_handler(request: Request, exc: HTTPException):
     """Custom HTTP exception handler"""
     return JSONResponse(
-        status_code=exc.status_code,
+        status_code=exc.status_code, #http_exception_handler
         content={
             "error": exc.detail,
             "status_code": exc.status_code

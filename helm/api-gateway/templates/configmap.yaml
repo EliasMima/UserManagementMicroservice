@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+data:
+  APP_NAME: "api-gateway"
+  ENVIRONMENT: "production"
+  LOG_FORMAT: "json"
+  RATE_LIMIT_ENABLED: "true"
+  RATE_LIMIT_MAX_REQUESTS: "100"
+  RATE_LIMIT_WINDOW_MS: "60000"
